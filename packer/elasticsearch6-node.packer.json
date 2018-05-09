@@ -86,6 +86,17 @@
       "script": "install-cloud-plugin.sh"
     },
     {
+      "type": "file",
+      "source": "../templates/logstash.conf",
+      "destination": "logstash.conf"
+    },
+    {
+      "type": "shell",
+      "script": "install-logstash6.sh",
+      "environment_vars": [ "ES_VERSION={{user `elasticsearch_version`}}" ],
+      "execute_command": "{{ .Vars }} sudo -E sh '{{ .Path }}'"
+    },
+    {
       "type": "shell",
       "script": "install-custom.sh"
     }

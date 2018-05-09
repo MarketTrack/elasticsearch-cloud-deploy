@@ -16,7 +16,7 @@ data "aws_availability_zones" "available" {}
 
 resource "aws_security_group" "elasticsearch_security_group" {
   name = "elasticsearch-${var.es_cluster}-security-group"
-  description = "Elasticsearch ports with ssh"
+  description = "Elasticsearch ports with SSH"
   vpc_id = "${var.vpc_id}"
 
   tags {
@@ -66,11 +66,11 @@ resource "aws_security_group" "elasticsearch_clients_security_group" {
     cluster = "${var.es_cluster}"
   }
 
-  # allow HTTP access to client nodes via ports 8080 and 80 (ELB)
+  # allow HTTP access to client nodes via ports 5900 and 80 (ELB)
   # better to disable, and either way always password protect!
   ingress {
-    from_port         = 8080
-    to_port           = 8080
+    from_port         = 5900
+    to_port           = 5900
     protocol          = "tcp"
     cidr_blocks       = ["0.0.0.0/0"]
   }
@@ -81,7 +81,7 @@ resource "aws_security_group" "elasticsearch_clients_security_group" {
     cidr_blocks       = ["0.0.0.0/0"]
   }
 
-  # allow HTTP access to client nodes via port 3000 for Grafana which has it's own login screen
+  # allow HTTP access to client nodes via port 3000 for Grafana which has its own login screen
   ingress {
     from_port         = 3000
     to_port           = 3000
@@ -112,7 +112,7 @@ resource "aws_elb" "es_client_lb" {
   connection_draining_timeout = 400
 
   listener {
-    instance_port     = 8080
+    instance_port     = 5900
     instance_protocol = "http"
     lb_port           = 80
     lb_protocol       = "http"
@@ -136,7 +136,7 @@ resource "aws_elb" "es_client_lb" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 3
-    target              = "HTTP:8080/status"
+    target              = "HTTP:5900/status"
     interval            = 6
   }
 

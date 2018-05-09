@@ -103,9 +103,14 @@ variable "public_facing" {
   default = "true"
 }
 
-# the ability to add additional existing security groups. In our case
-# we have consul running as agents on the box
+# the ability to add additional existing security groups.
 variable "additional_security_groups" {
   type = "list"
+  default = []
+}
+
+variable "writer_security_groups" {
+  type = "list"
+  description = "Logstash writer client security groups"
   default = []
 }

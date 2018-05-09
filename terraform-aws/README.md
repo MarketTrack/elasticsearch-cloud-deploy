@@ -24,7 +24,7 @@ Edit `variables.tf` to specify the following:
 * `key_name` - the name of the key to use - that key needs to be handy so you can access the machines if needed.
 * `vpc_id` - the ID of the VPC to launch the cluster in.
 
-The rest of the configurations are mostly around cluster topology and  machine types and sizes.
+The rest of the configurations are mostly around cluster topology and machine types and sizes.
 
 ### Cluster topology
 
@@ -77,15 +77,15 @@ Note `clients_dns` - that's your entry point to the cluster.
 
 ### Look around
 
-The client nodes are the ones exposed to external networks. They provide Kibana, Kopf and direct Elasticsearch access. Client nodes are accessible via their public IPs (depending on your security group / VPC settings) and the DNS of the ELB they are attached to (see above).
+The client nodes are the ones exposed to external networks. They provide Kibana, Cerebro, and direct Elasticsearch access. Client nodes are accessible via their public IPs (depending on your security group / VPC settings) and the DNS of the ELB they are attached to (see above).
 
-Client nodes listen on port 8080 and are password protected. Access is managed by nginx which is expecting a username and password pair. Default ones are exampleuser/changeme. You can change those defaults by editing [this file](https://github.com/synhershko/elasticsearch-cloud-deploy/blob/master/packer/install-nginx.sh) and running Packer again.
+Client nodes listen on port 5900 and are password protected. Access is managed by nginx which is expecting a username and password pair. The default username is "exampleuser" and the default password is randomly generated. You can change those defaults by editing the `/packer/install-nginx.sh` file and running Packer again.
 
 On client nodes you will find:
 
-* Kibana access is direct on port 8080 (http://host:8080)
-* [Cerebro](https://github.com/lmenezes/cerebro) (a cluster management UI) is available on http://host:8080/cerebro/
-* For direct Elasticsearch access, go to host:8080/es/
+* http://host:5900/ exposing Kibana
+* http://host:5900/cerebro/ exposing [Cerebro](https://github.com/lmenezes/cerebro) (a cluster management UI)
+* http://host:5900/es/ exposing direct Elasticsearch access
 
 You can pull the list of instances by their state and role using aws-cli:
 
@@ -104,4 +104,4 @@ ssh -i elasticsearch.pem ubuntu@{public IP / DNS of the instance}
 
 Terraform is smart enough to make the least amount of changes possible and resize resources when possible instead of destroying them.
  
-When you want to change the cluster configuration (e.g. add more client nodes, data nodes, resize disk or instances, etc) just edit variables.tf and run `terraform plan` followed by `terraform apply`.
+When you want to change the cluster configuration (e.g. add more client nodes, data nodes, resize disk or instances, etc.) just edit variables.tf and run `terraform plan` followed by `terraform apply`.

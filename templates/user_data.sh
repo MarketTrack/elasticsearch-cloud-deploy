@@ -102,6 +102,9 @@ systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
 
+# Start Logstash
+systemctl enable logstash.service
+sudo service logstash restart
 
 # Setup x-pack security also on Kibana configs where applicable
 if [ -f "/etc/kibana/kibana.yml" ]; then
